@@ -3,6 +3,8 @@ import React from "react";
 import GoogleButton from "../atoms/googleButton";
 
 const Signnuppage = () => {
+  // if (typeof localStorage === "undefined") return;
+
   return (
     <div>
       <div className="flex flex-col justify-center mt-2 xl:mt-5 w-[75vw] mobile:max-sm:w-[95%]">
