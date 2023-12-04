@@ -1,8 +1,8 @@
 "use client";
+// import Pulsation from "@/app/[signup]/component/PulseLoader";
+import { supabase } from "@/utils/supabase/client";
 import Image from "next/image";
 import React, { useState } from "react";
-import PulseLoader from "./pulseLoader";
-import { supabase } from "../../../utils/supabase/client";
 
 const urlToUse = () => {
   let url: string | undefined =
@@ -50,7 +50,7 @@ const GoogleButton = () => {
           alt="google logo"
           src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png"
         />
-        <p>{isLoading ? <PulseLoader /> : "Sign In with Google"}</p>
+        <p>{isLoading ? "Loading..." : "Sign In with Google"}</p>
       </button>
     </div>
   );
