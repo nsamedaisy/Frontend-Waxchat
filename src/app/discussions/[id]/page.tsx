@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, ChangeEvent, useEffect } from "react";
+import { useDropzone } from "react-dropzone";
+
 import Avatar from "@/components/atoms/Avatar";
 import {
   FaSearch,
@@ -24,6 +26,44 @@ const Chats = () => {
   const [message, setMessage] = useState("");
   const [showInfoCard, setShowInfoCard] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+
+  const handleFileDrop = (acceptedFiles: File[]) => {
+    // Handle file upload logic here
+    setUploadedFiles((prevUploadedFiles) => [
+      ...prevUploadedFiles,
+      ...acceptedFiles,
+    ]);
+  };
+
+  const handleRemoveFile = (fileIndex: number) => {
+    setUploadedFiles((prevUploadedFiles) =>
+      prevUploadedFiles.filter((_, index) => index !== fileIndex)
+    );
+  };
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    accept: ["application/pdf", "image/*", "video/*"],
+    multiple: true,
+    onDrop: handleFileDrop,
+  });
+
+  const handleDocumentClick = () => {
+    const input = document.getElementById("fileInput");
+    if (input) {
+      input.click();
+    }
+  };
+
+  const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      handleFileDrop(Array.from(files));
+    }
+  };
+
+  
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -154,14 +194,30 @@ const Chats = () => {
     {showDropdown && (
         <DropdownModal onClose={() => setShowDropdown(false)}>
           <div className="p-5 pr-10 rounded-xl bg-white absolute bottom-16 left-[41%] transform -translate-x-1/2 shadow-lg">
-            <div className="flex items-center space-x-3 text-lg cursor-pointer">
+            <div
+              className="flex items-center space-x-3 text-lg cursor-pointer"
+              onClick={handleDocumentClick}
+            >
               <FaFileInvoice className="text-purple-500 text-2xl" />
               <span className="text-gray-600">Document</span>
+              <input
+                type="file"
+                id="fileInput"
+                accept="application/pdf"
+                hidden
+                onChange={handleFileInputChange}
+              />
             </div>
-            <div className="flex items-center py-5 space-x-3 text-lg cursor-pointer">
+            <div
+              className="flex items-center py-5 space-x-3 text-lg cursor-pointer"
+              onClick={() => {
+                // Handle photos/videos upload logic here
+              }}
+            >
               <FaPhotoVideo className="text-blue-600 text-2xl" />
               <span className="text-gray-600">Photos & Videos</span>
             </div>
+
             <div className="flex items-center space-x-3 text-lg cursor-pointer">
               <FaCamera className="text-pink-600  text-2xl" />
               <span className="text-gray-600">Camera</span>
@@ -173,6 +229,14 @@ const Chats = () => {
           </div>
         </DropdownModal>
       )}
+
+
+      {uploadedFiles.map((file, index) => (
+        <div key={index}>
+          <p>{file.name}</p>
+          <button onClick={() => handleRemoveFile(index)}>Remove</button>
+        </div>
+      ))}
 
     </>
   );
