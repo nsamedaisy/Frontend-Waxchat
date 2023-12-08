@@ -37,11 +37,12 @@ const Chats = () => {
     ]);
   };
 
-  const handleRemoveFile = (fileIndex: number) => {
-    setUploadedFiles((prevUploadedFiles) =>
-      prevUploadedFiles.filter((_, index) => index !== fileIndex)
-    );
-  };
+  // const handleRemoveFile = (fileIndex: number) => {
+  //   setUploadedFiles((prevUploadedFiles) =>
+  //     prevUploadedFiles.filter((_, index) => index !== fileIndex)
+  //   );
+  // };
+  
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: ["application/pdf", "image/*", "video/*"],
@@ -56,17 +57,20 @@ const Chats = () => {
     }
   };
 
-  const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      handleFileDrop(Array.from(files));
-    }
-  };
-
-  
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setMessage(e.target.value);
+    const inputValue = e.target.value;
+    const inputFiles = e.target.files;
+  
+    // Handle message input
+    if (inputValue) {
+      setMessage(inputValue);
+    }
+  
+    // Handle document input
+    if (inputFiles && inputFiles.length > 0) {
+      handleFileDrop(Array.from(inputFiles));
+    }
   };
 
   const handleSendMessage = (e: { preventDefault: () => void }) => {
@@ -100,6 +104,51 @@ const Chats = () => {
     };
   }, [showDropdown]);
 
+  
+  const handleCameraClick = async () => {
+    try {
+      const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
+
+      const videoElement = document.createElement("video");
+      videoElement.srcObject = mediaStream;
+      videoElement.onloadedmetadata = () => {
+        videoElement.play();
+
+        const canvas = document.createElement("canvas");
+        canvas.width = videoElement.videoWidth;
+        canvas.height = videoElement.videoHeight;
+        const context = canvas.getContext("2d");
+        context?.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+        canvas.toBlob((blob) => {
+          if (blob) {
+            const fileProperties = {
+              type: blob.type,
+              lastModified: Date.now(),
+              webkitRelativePath: "",
+            };
+
+            const file = new File([blob], "captured_image.jpg", fileProperties);
+
+            handleFileUpload(file);
+          }
+
+          // Stop the media stream and clean up
+          mediaStream.getTracks().forEach((track) => track.stop());
+          videoElement.srcObject = null;
+        }, "image/jpeg", 1);
+      };
+    } catch (error) {
+      console.error("Error accessing camera:", error);
+    }
+  };
+
+
+
+  const handleFileUpload = (file: File) => {
+    // Handle the file upload logic here
+  };
+
   return (
     <>
     <div className="w-full flex justify-between">
@@ -126,7 +175,7 @@ const Chats = () => {
           </div>
         </div>
         {/* ######## ALL MESSAGES SHOULD BE DISPLAYED IN THIS DIV BELLOW ########## */}
-        <div
+        <div {...getRootProps()}
           style={{
             backgroundImage:
               "url('https://i.pinimg.com/600x315/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg')",
@@ -152,7 +201,7 @@ const Chats = () => {
               onClick={handlePlusIconClick}
             />
           )}
-          <input
+          <input 
             type="text"
             placeholder="Type a message"
             value={message}
@@ -200,25 +249,30 @@ const Chats = () => {
             >
               <FaFileInvoice className="text-purple-500 text-2xl" />
               <span className="text-gray-600">Document</span>
-              <input
+              <input {...getInputProps()}
                 type="file"
                 id="fileInput"
                 accept="application/pdf"
                 hidden
-                onChange={handleFileInputChange}
+                onChange={handleChange}
               />
             </div>
             <div
               className="flex items-center py-5 space-x-3 text-lg cursor-pointer"
-              onClick={() => {
-                // Handle photos/videos upload logic here
-              }}
+              onClick={handleDocumentClick}
             >
               <FaPhotoVideo className="text-blue-600 text-2xl" />
               <span className="text-gray-600">Photos & Videos</span>
+              <input {...getInputProps()}
+                type="file"
+                id="fileInput"
+                accept="image/*, video/*"
+                hidden
+                onChange={handleChange}
+              />
             </div>
 
-            <div className="flex items-center space-x-3 text-lg cursor-pointer">
+            <div className="flex items-center space-x-3 text-lg cursor-pointer" onClick={handleCameraClick}>
               <FaCamera className="text-pink-600  text-2xl" />
               <span className="text-gray-600">Camera</span>
             </div>
@@ -231,12 +285,13 @@ const Chats = () => {
       )}
 
 
+{/* 
       {uploadedFiles.map((file, index) => (
         <div key={index}>
           <p>{file.name}</p>
           <button onClick={() => handleRemoveFile(index)}>Remove</button>
         </div>
-      ))}
+      ))} */}
 
     </>
   );
