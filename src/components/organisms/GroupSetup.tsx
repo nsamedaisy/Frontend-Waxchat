@@ -24,7 +24,7 @@ function GroupSetup() {
       setGroupIcon(groupAvatar);
       //   console.log("Group icon", groupAvatar);
     }
-    // console.log(e.target.files[0]);
+    console.log(e.target.files[0]);
   };
 
   //   console.log(file);
