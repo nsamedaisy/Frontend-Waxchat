@@ -79,6 +79,20 @@ const Chats = () => {
     multiple: true,
     onDrop: handleFileDrop,
   });
+
+  const handleDocumentClick = () => {
+    const input = document.getElementById("fileInput");
+    if (input) {
+      input.click();
+    }
+  };
+
+  const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      handleFileDrop(Array.from(files));
+    }
+  };
   
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -243,12 +257,17 @@ const Chats = () => {
           <div className="p-5 pr-10 rounded-xl bg-white absolute bottom-16 left-[41%] transform -translate-x-1/2 shadow-lg">
             <div
               className="flex items-center space-x-3 text-lg cursor-pointer"
-              onClick={() => {
-                // Handle document upload logic here
-              }}
+              onClick={handleDocumentClick}
             >
               <FaFileInvoice className="text-purple-500 text-2xl" />
               <span className="text-gray-600">Document</span>
+              <input
+                type="file"
+                id="fileInput"
+                accept="application/pdf"
+                hidden
+                onChange={handleFileInputChange}
+              />
             </div>
             <div
               className="flex items-center py-5 space-x-3 text-lg cursor-pointer"
