@@ -1,7 +1,10 @@
 "use client";
 import React from "react";
 import { useAppContext } from "@/app/Context/AppContext";
+
 import { FaCamera } from "react-icons/fa";
+import DropdownModal from "../atoms/DropdownModal";
+import Overlay from "../atoms/Overlay";
 
 type Props = {
   image: string;
@@ -10,11 +13,12 @@ type Props = {
 };
 
 const Dp = ({ image, onClick, content }: Props) => {
+
   const { currentUser, allUsers } = useAppContext();
 
   return (
     <div>
-      <div className="flex items-center bg-bgGray justify-center p-5">
+      <div className="flex items-center bg-bgGray justify-center relative p-5">
         <div
           style={{
             backgroundImage: `url(${
@@ -31,7 +35,7 @@ const Dp = ({ image, onClick, content }: Props) => {
           className="self-center"
         >
           <button
-            onClick={onClick}
+            onClick={() => setOpenModal((prev) => !prev)}
             style={{
               width: `200px`,
               height: `200px`,
@@ -42,6 +46,29 @@ const Dp = ({ image, onClick, content }: Props) => {
             {content}
           </button>
         </div>
+
+        {openModal && (
+          <>
+            <Overlay
+              onClick={() => setOpenModal((prev) => !prev)}
+              transparent
+            />
+            <div className="absolute top-[55%] right-0 z-40">
+              <DropdownModal
+                onClose={function (): void {
+                  throw new Error("Function not implemented.");
+                }}
+              >
+                <button
+                  onClick={onClick}
+                  className="my-2 hover:bg-bgGray text-start p-2 text-slate-600 text-sm"
+                >
+                  <span>Upload Photo</span>
+                </button>
+              </DropdownModal>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
