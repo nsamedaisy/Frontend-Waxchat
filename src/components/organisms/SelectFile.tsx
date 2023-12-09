@@ -1,4 +1,7 @@
+"use client"
+
 import React, { useState, ChangeEvent, useEffect } from "react";
+import { useRouter } from 'next/navigation'
 
 import { useDropzone } from "react-dropzone";
 import { FaPlus, FaTimes, FaPaperPlane, FaFile } from "react-icons/fa";
@@ -13,6 +16,13 @@ const SelectFile: React.FC<SelectFileProps> = ({ file }) => {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
 
   const [isHovered, setIsHovered] = useState(false);
+  const router = useRouter();
+
+  const handleClear = () => {
+    // Add any additional logic you need before going back to the chats component
+    router.back();
+  };
+
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -47,13 +57,14 @@ const SelectFile: React.FC<SelectFileProps> = ({ file }) => {
   });
 
   return (
-    <div className="dropzone bg-chatGray z-30 h-[89vh] w-[65%] right-12 top-16 space-y-10 fixed">
+    <div className="dropzone bg-chatGray z-30 h-[89vh] w-[65%] right-12 top-16 fixed">
+
       <div className="h-16 bg-gray-200 flex items-center p-4">
-        <FaTimes className="text-gray-500 text-3xl cursor-pointer" />{" "}
-        {/* <p>{{file.name}}</p> */}
+        <FaTimes className="text-gray-500 text-3xl cursor-pointer mr-96" onClick={handleClear}/>{" "}
+        <p>{file.name}</p>
       </div>
 
-      <div className="flex justify-center items-center flex-col">
+      <div className="flex justify-center items-center flex-col my-36">
         <FaFile className="text-9xl mb-6 text-white" />
         <p className="text-2xl text-gray-400">No preview available</p>
         <p className="text-base text-gray-400">194 MB - DMG</p>
@@ -70,7 +81,7 @@ const SelectFile: React.FC<SelectFileProps> = ({ file }) => {
         />
         <AiOutlineSmile className="mr-5 text-myG text-4xl" />
       </div>
-      <p className=" border-b border-gray-300"></p>
+      <p className=" border-b border-gray-300 my-6"></p>
 
       <div className="flex space-x-4 justify-center">
         {uploadedFiles.map((file, index) => (
