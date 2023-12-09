@@ -164,12 +164,7 @@ const Chats = () => {
           </div>
           {/* ######## ALL MESSAGES SHOULD BE DISPLAYED IN THIS DIV ABOVE ########## */}
 
-<<<<<<< HEAD
             <div
-=======
-          {!selectedFile && (
-            <form
->>>>>>> 296858d (select file component)
               onSubmit={handleSendMessage}
               className="flex items-center justify-between p-3 text-2xl text-gray-500  bg-chatGray"
               style={{ transition: "none" }}
@@ -191,12 +186,9 @@ const Chats = () => {
                 placeholder="Type a message"
                 value={message}
                 onChange={handleChange}
-<<<<<<< HEAD
                 className="w-full p-2 bg-white text-sm border-0 rounded-md focus:outline-none mx-6 "
               onKeyDown={handleKeyDown}
-=======
                 className="w-full p-2 bg-white text-sm border-0 rounded-md focus:outline-none mx-6"
->>>>>>> 296858d (select file component)
               />
               {message.length === 0 ? (
                 <button>
@@ -210,14 +202,8 @@ const Chats = () => {
                   />
                 </button>
               )}
-<<<<<<< HEAD
             </div>
           </div>
-=======
-            </form>
-          )}
-        </div>
->>>>>>> 296858d (select file component)
 
         {showInfoCard && (
           <ContactInfo
