@@ -59,14 +59,8 @@ const Chats = () => {
 
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
 
-  const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      handleFileDrop(Array.from(files));
-    }
-  };
-
   const handleFileDrop = (acceptedFiles: File[]) => {
+    // Handle file upload logic here
     setUploadedFiles((prevUploadedFiles) => [
       ...prevUploadedFiles,
       ...acceptedFiles,
@@ -79,10 +73,23 @@ const Chats = () => {
     );
   };
 
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    // accept: ["application/pdf", "image/*", "video/*"],
+    multiple: true,
+    onDrop: handleFileDrop,
+  });
+
   const handleDocumentClick = () => {
     const input = document.getElementById("fileInput");
     if (input) {
       input.click();
+    }
+  };
+
+  const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      handleFileDrop(Array.from(files));
     }
   };
 
@@ -230,20 +237,16 @@ const Chats = () => {
       {showDropdown && (
         <DropdownModal onClose={() => setShowDropdown(false)}>
           <div className="p-5 pr-10 rounded-xl bg-white absolute bottom-16 left-[41%] transform -translate-x-1/2 shadow-lg">
+            
             <div
-              className="flex items-center space-x-3 text-lg cursor-pointer"
+              {...getRootProps()}
+              className="dropzone flex items-center space-x-3 text-lg cursor-pointer"
               onClick={handleDocumentClick}
             >
               <FaFileInvoice className="text-purple-500 text-2xl" />
               <span className="text-gray-600">Document</span>
-              <input
-                type="file"
-                id="fileInput"
-                accept="application/pdf"
-                hidden
-                onChange={handleFileInputChange}
-              />
             </div>
+
             <div
               className="flex items-center py-5 space-x-3 text-lg cursor-pointer"
               onClick={() => {
@@ -264,7 +267,8 @@ const Chats = () => {
           </div>
         </DropdownModal>
       )}
-<div {...getRootProps()} className="dropzone">
+
+      <div {...getRootProps()} className="dropzone">
         <input {...getInputProps()} />
         {isDragActive ? (
           <p>Drop the files here...</p>
@@ -279,8 +283,6 @@ const Chats = () => {
           <button onClick={() => handleRemoveFile(index)}>Remove</button>
         </div>
       ))}
-
-
     </>
   );
 };
