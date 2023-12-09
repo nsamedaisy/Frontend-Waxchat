@@ -8,8 +8,8 @@ import { FaPlus, FaTimes, FaPaperPlane, FaFile } from "react-icons/fa";
 import { AiOutlineSmile } from "react-icons/ai";
 
 interface SelectFileProps {
-  file: File;
-}
+    file: File;
+  }
 
 const SelectFile: React.FC<SelectFileProps> = ({ file }) => {
   const [message, setMessage] = useState("");
@@ -81,7 +81,7 @@ const SelectFile: React.FC<SelectFileProps> = ({ file }) => {
       <p className=" border-b border-gray-300 my-6"></p>
 
       <div className="flex space-x-4 justify-center">
-        {uploadedFiles.map((file, index) => (
+        {uploadedFiles.map((_, index) => (
           <div
             key={index}
             className="border-4 border-themecolor flex-col p-8 w-16 h-16 relative cursor-pointer rounded-md bg-white hover:bg-gray-300 "
