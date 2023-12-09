@@ -244,7 +244,6 @@ const Chats = () => {
             name={"Caleb matins"}
             about={"made of gold"}
             email={"calebmatins@gmail.com"}
-            // isGroup={""}
           />
         )}
       </div>
