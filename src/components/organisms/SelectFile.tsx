@@ -53,11 +53,12 @@ const SelectFile: React.FC<SelectFileProps> = ({ file }) => {
         {/* <p>{{file.name}}</p> */}
       </div>
 
-      <div className="flex justify-center items-center flex-col mt-20">
+      <div className="flex justify-center items-center flex-col">
         <FaFile className="text-9xl mb-6 text-white" />
         <p className="text-2xl text-gray-400">No preview available</p>
         <p className="text-base text-gray-400">194 MB - DMG</p>
       </div>
+      
 
       <div className="flex bg-white rounded-md py-2 pl-4 w-[75%] m-auto">
         <input
