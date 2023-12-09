@@ -2,6 +2,8 @@
 
 import React, { useState, ChangeEvent, useEffect } from "react";
 
+import { useDropzone } from "react-dropzone";
+
 import Avatar from "@/components/atoms/Avatar";
 import {
   FaSearch,
@@ -25,6 +27,21 @@ const Chats = () => {
   const [message, setMessage] = useState("");
   const [showInfoCard, setShowInfoCard] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+
+  const [showSelectFile, setShowSelectFile] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  const handleFileSelect = (acceptedFiles: File[]) => {
+    if (acceptedFiles.length > 0) {
+      setSelectedFile(acceptedFiles[0]);
+    }
+  };
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop: handleFileSelect,
+    multiple: false,
+    // accept: "application/pdf",
+  });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -94,48 +111,51 @@ const Chats = () => {
             }}
             className="w-full h-[calc(100vh-117px)] bigScreen:h-[calc(100vh-117px-39px)] overflow-x-scroll p-4"
           >
-<SelectFile />
+
+            {selectedFile && <SelectFile file={selectedFile} />}
             
           </div>
           {/* ######## ALL MESSAGES SHOULD BE DISPLAYED IN THIS DIV ABOVE ########## */}
 
-          <form
-            onSubmit={handleSendMessage}
-            className="flex items-center justify-between p-3 text-2xl text-gray-500  bg-chatGray"
-            style={{ transition: "none" }}
-          >
-            <AiOutlineSmile className="mr-5 text-myG text-4xl" />
-            {showDropdown ? (
-              <FaTimes
-                className="text-gray-500 cursor-pointer bg-gray-200 p-2 text-4xl rounded-full "
-                onClick={handlePlusIconClick}
-              />
-            ) : (
-              <FaPlus
-                className="text-gray-500 cursor-pointer"
-                onClick={handlePlusIconClick}
-              />
-            )}
-            <input
-              type="text"
-              placeholder="Type a message"
-              value={message}
-              onChange={handleChange}
-              className="w-full p-2 bg-white text-sm border-0 rounded-md focus:outline-none mx-6"
-            />
-            {message.length === 0 ? (
-              <button>
-                <FaMicrophone className="text-gray-600 mr-4" />
-              </button>
-            ) : (
-              <button>
-                <FaPaperPlane
-                  className="mr-4 text-gray-500 cursor-pointer"
-                  onClick={handleSendMessage}
+          {!selectedFile && (
+            <form
+              onSubmit={handleSendMessage}
+              className="flex items-center justify-between p-3 text-2xl text-gray-500  bg-chatGray"
+              style={{ transition: "none" }}
+            >
+              <AiOutlineSmile className="mr-5 text-myG text-4xl" />
+              {showDropdown ? (
+                <FaTimes
+                  className="text-gray-500 cursor-pointer bg-gray-200 p-2 text-4xl rounded-full "
+                  onClick={handlePlusIconClick}
                 />
-              </button>
-            )}
-          </form>
+              ) : (
+                <FaPlus
+                  className="text-gray-500 cursor-pointer"
+                  onClick={handlePlusIconClick}
+                />
+              )}
+              <input
+                type="text"
+                placeholder="Type a message"
+                value={message}
+                onChange={handleChange}
+                className="w-full p-2 bg-white text-sm border-0 rounded-md focus:outline-none mx-6"
+              />
+              {message.length === 0 ? (
+                <button>
+                  <FaMicrophone className="text-gray-600 mr-4" />
+                </button>
+              ) : (
+                <button>
+                  <FaPaperPlane
+                    className="mr-4 text-gray-500 cursor-pointer"
+                    onClick={handleSendMessage}
+                  />
+                </button>
+              )}
+            </form>
+          )}
         </div>
 
         {showInfoCard && (
@@ -157,9 +177,11 @@ const Chats = () => {
         <DropdownModal onClose={() => setShowDropdown(false)}>
           <div className="p-5 pr-10 rounded-xl bg-white absolute bottom-16 left-[41%] transform -translate-x-1/2 shadow-lg">
             <div
+              {...getRootProps()}
               className="dropzone flex items-center space-x-3 text-lg cursor-pointer"
               // onClick={handleDocumentClick}
             >
+              <input {...getInputProps()} />
               <FaFileInvoice className="text-purple-500 text-2xl" />
               <span className="text-gray-600">Document</span>
             </div>
@@ -184,7 +206,6 @@ const Chats = () => {
           </div>
         </DropdownModal>
       )}
-
     </>
   );
 };
