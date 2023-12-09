@@ -61,7 +61,7 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage }) => {
   });
 
   return (
-    <div className="dropzone bg-chatGray z-30 h-[89vh] w-[65%] right-12 top-16 fixed">
+    <div className="dropzone bg-chatGray z-30 h-[90vh] w-[65%] right-12 top-16 fixed">
       <div className="h-16 bg-gray-200 flex items-center p-4">
         <FaTimes
           className="text-gray-500 text-3xl cursor-pointer mr-96"
@@ -71,34 +71,28 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage }) => {
       </div>
 
 
-      <div className="flex justify-center items-center flex-col my-20">
+     <div className="flex justify-center items-center flex-col my-20">
   {file && typeof file === "string" ? (
     <div>
-      <h3>Preview:</h3>
-      <img src={file} alt="Captured" />
+      <img src={file} alt="Captured" className="max-w-full w-80 h-auto" />
     </div>
   ) : file ? (
     <div>
-      <h3>Preview:</h3>
-      <img src={URL.createObjectURL(file as Blob)} alt="Uploaded" />
+      <img src={URL.createObjectURL(file as Blob)} alt="Uploaded" className="max-w-full w-80 mb-6 h-auto" />
+    <FaFile className="text-9xl mb-6 text-white" />
+    <p className="text-base text-gray-400">194 MB - DMG</p>
     </div>
   ) : (
     <div className="hidden">
-      <h3>Preview:</h3>
       <img src="" alt="" />
     </div>
   )}
-  {!file && typeof file !== "string" && (
-    <FaFile className="text-9xl mb-6 text-white" />
-  )}
+  {/* {!file && typeof file !== "string" && (
+  )} */}
   {!file && (
     <p className="text-2xl text-gray-400">No preview available</p>
   )}
-  {!file && (
-    <p className="text-base text-gray-400">194 MB - DMG</p>
-  )}
 </div>
-
 
       <div className="flex bg-white rounded-md py-2 pl-4 w-[75%] m-auto">
         <input
