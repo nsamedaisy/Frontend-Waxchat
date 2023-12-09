@@ -26,7 +26,6 @@ const socket = io("http://localhost:3001", {
 
 import ContactInfo from "@/components/organisms/ContactInfo";
 import DropdownModal from "@/components/atoms/DropdownModal";
-import { sendError } from "next/dist/server/api-utils";
 
 const Chats = () => {
   const param = useParams();
@@ -60,8 +59,14 @@ const Chats = () => {
 
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
 
+  const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      handleFileDrop(Array.from(files));
+    }
+  };
+
   const handleFileDrop = (acceptedFiles: File[]) => {
-    // Handle file upload logic here
     setUploadedFiles((prevUploadedFiles) => [
       ...prevUploadedFiles,
       ...acceptedFiles,
@@ -74,26 +79,12 @@ const Chats = () => {
     );
   };
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    accept: ["application/pdf", "image/*", "video/*"],
-    multiple: true,
-    onDrop: handleFileDrop,
-  });
-
   const handleDocumentClick = () => {
     const input = document.getElementById("fileInput");
     if (input) {
       input.click();
     }
   };
-
-  const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      handleFileDrop(Array.from(files));
-    }
-  };
-  
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -155,99 +146,83 @@ const Chats = () => {
           }`}
         >
           <div className="flex items-center justify-between p-2  bg-chatGray border-l-2 w-full">
-            <div
-              onClick={handleAvatarClick}
-              className="flex items-center hover:cursor-ponter"
-            >
+            <div className="flex items-center">
               <Avatar
                 size={4}
-                profilePicture={
-                  activeChat?.image ||
-                  "https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
-                }
+                profilePicture="https://i.pinimg.com/564x/17/f7/ba/17f7baaff77ee55d8807fcd7b2d2f47a.jpg"
+                onClick={handleAvatarClick}
               />
               <div className="ml-4 ">
-                <p className="text-md hover:cursor-pointer ">
-                  {activeChat.name}
-                </p>
+                <p className="text-md">John Doe</p>
                 {/* <span className="text-gray-500 text-xs">online/offline</span> */}
               </div>
             </div>
             <div className="flex items-center text-gray-500 text-xl">
               <FaSearch className="mr-8" />
-              <FaEllipsisV
-                onClick={handleAvatarClick}
-                className="mr-2 hover:cursor-pointer  hover:bg-gray-300 rounded-full w-fit self-center"
-              />
+              <FaEllipsisV className="mr-2" />
             </div>
           </div>
-
+          {/* ######## ALL MESSAGES SHOULD BE DISPLAYED IN THIS DIV BELLOW ########## */}
           <div
             style={{
               backgroundImage:
                 "url('https://i.pinimg.com/600x315/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg')",
             }}
             className="w-full h-[calc(100vh-117px)] bigScreen:h-[calc(100vh-117px-39px)] overflow-x-scroll p-4"
-          >
-            {receivedMessages?.map((message, i) => (
-              <div key={i}>{message} </div>
-            ))}
-          </div>
+          ></div>
           {/* ######## ALL MESSAGES SHOULD BE DISPLAYED IN THIS DIV ABOVE ########## */}
 
-          <div
-            onSubmit={handleSendMessage}
-            className="flex items-center justify-between p-3 text-2xl text-gray-500  bg-chatGray"
-            style={{ transition: "none" }}
-          >
-            <AiOutlineSmile className="mr-5 text-myG text-4xl" />
-            {showDropdown ? (
-              <FaTimes
-                className="text-gray-500 cursor-pointer bg-gray-200 p-2 text-4xl rounded-full "
-                onClick={handlePlusIconClick}
-              />
-            ) : (
-              <FaPlus
-                className="text-gray-500 cursor-pointer"
-                onClick={handlePlusIconClick}
-              />
-            )}
-            <input
-              type="text"
-              placeholder="Type a message"
-              value={message}
-              onChange={handleChange}
-              className="w-full p-2 bg-white text-sm border-0 rounded-md focus:outline-none mx-6 "
-              onKeyDown={handleKeyDown}
-            />
-            {message.length === 0 ? (
-              <button>
-                <FaMicrophone className="text-gray-600 mr-4" />
-              </button>
-            ) : (
-              <button>
-                <FaPaperPlane
-                  className="mr-4 text-gray-500 cursor-pointer"
-                  onClick={handleSendMessage}
+            <div
+              onSubmit={handleSendMessage}
+              className="flex items-center justify-between p-3 text-2xl text-gray-500  bg-chatGray"
+              style={{ transition: "none" }}
+            >
+              <AiOutlineSmile className="mr-5 text-myG text-4xl" />
+              {showDropdown ? (
+                <FaTimes
+                  className="text-gray-500 cursor-pointer bg-gray-200 p-2 text-4xl rounded-full "
+                  onClick={handlePlusIconClick}
                 />
-              </button>
-            )}
+              ) : (
+                <FaPlus
+                  className="text-gray-500 cursor-pointer"
+                  onClick={handlePlusIconClick}
+                />
+              )}
+              <input
+                type="text"
+                placeholder="Type a message"
+                value={message}
+                onChange={handleChange}
+                className="w-full p-2 bg-white text-sm border-0 rounded-md focus:outline-none mx-6 "
+              onKeyDown={handleKeyDown}
+              />
+              {message.length === 0 ? (
+                <button>
+                  <FaMicrophone className="text-gray-600 mr-4" />
+                </button>
+              ) : (
+                <button>
+                  <FaPaperPlane
+                    className="mr-4 text-gray-500 cursor-pointer"
+                    onClick={handleSendMessage}
+                  />
+                </button>
+              )}
+            </div>
           </div>
-        </div>
 
         {showInfoCard && (
           <ContactInfo
             id={""}
-            title={` ${activeChat.isGroup ? "Group info" : "Contact info"}`}
+            title={"Contact info"}
             onClose={() => setShowInfoCard((prev) => !prev)}
             picture={
-              activeChat?.image ||
-              "https://i.pinimg.com/564x/a7/da/a4/a7daa4792ad9e6dc5174069137f210df.jpg"
+              "https://i.pinimg.com/564x/fe/85/c3/fe85c35b97c3f14082ac2edfb25eba44.jpg"
             }
-            name={activeChat?.name}
+            name={"Caleb matins"}
             about={"made of gold"}
-            email={activeChat?.email}
-            isGroup={activeChat.isGroup}
+            email={"calebmatins@gmail.com"}
           />
         )}
       </div>
