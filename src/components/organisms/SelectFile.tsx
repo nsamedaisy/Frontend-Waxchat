@@ -19,10 +19,8 @@ const SelectFile: React.FC<SelectFileProps> = ({ file }) => {
   const router = useRouter();
 
   const handleClear = () => {
-    // Add any additional logic you need before going back to the chats component
     router.back();
   };
-
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -70,7 +68,6 @@ const SelectFile: React.FC<SelectFileProps> = ({ file }) => {
         <p className="text-base text-gray-400">194 MB - DMG</p>
       </div>
       
-
       <div className="flex bg-white rounded-md py-2 pl-4 w-[75%] m-auto">
         <input
           type="text"
@@ -113,7 +110,6 @@ const SelectFile: React.FC<SelectFileProps> = ({ file }) => {
           )}
           {/* {isHovered && <span className=" bg-gray-300 text-sm px-2 py-1">Add file</span>} */}
         </div>
-
 
         <div className="bg-themecolor rounded-full w-16 h-16 cursor-pointer flex items-center justify-center">
           <FaPaperPlane className="text-3xl text-white" />
