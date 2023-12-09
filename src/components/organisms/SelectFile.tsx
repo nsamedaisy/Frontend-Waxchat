@@ -1,22 +1,28 @@
-"use client"
+"use client";
 
-import React, { useState, ChangeEvent, useEffect } from "react";
-import { useRouter } from 'next/navigation'
+import React, { useState, ChangeEvent } from "react";
+import { useRouter } from "next/navigation";
 
 import { useDropzone } from "react-dropzone";
 import { FaPlus, FaTimes, FaPaperPlane, FaFile } from "react-icons/fa";
 import { AiOutlineSmile } from "react-icons/ai";
 
 interface SelectFileProps {
-    file: File;
-  }
+  file: File | string;
+  onCaptureImage: (image: string) => void;
+}
 
-const SelectFile: React.FC<SelectFileProps> = ({ file }) => {
+const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage }) => {
   const [message, setMessage] = useState("");
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
 
   const [isHovered, setIsHovered] = useState(false);
   const router = useRouter();
+
+  const handleCaptureImage = () => {
+    const capturedImage = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQE...";
+    onCaptureImage(capturedImage);
+  };
 
   const handleClear = () => {
     router.back();
@@ -56,18 +62,44 @@ const SelectFile: React.FC<SelectFileProps> = ({ file }) => {
 
   return (
     <div className="dropzone bg-chatGray z-30 h-[89vh] w-[65%] right-12 top-16 fixed">
-
       <div className="h-16 bg-gray-200 flex items-center p-4">
-        <FaTimes className="text-gray-500 text-3xl cursor-pointer mr-96" onClick={handleClear}/>{" "}
-        <p>{file.name}</p>
+        <FaTimes
+          className="text-gray-500 text-3xl cursor-pointer mr-96"
+          onClick={handleClear}
+        />{" "}
+        <p>{typeof file === "string" ? "Captured Image" : file.name}</p>
       </div>
 
-      <div className="flex justify-center items-center flex-col my-36">
-        <FaFile className="text-9xl mb-6 text-white" />
-        <p className="text-2xl text-gray-400">No preview available</p>
-        <p className="text-base text-gray-400">194 MB - DMG</p>
-      </div>
-      
+
+      <div className="flex justify-center items-center flex-col my-20">
+  {file && typeof file === "string" ? (
+    <div>
+      <h3>Preview:</h3>
+      <img src={file} alt="Captured" />
+    </div>
+  ) : file ? (
+    <div>
+      <h3>Preview:</h3>
+      <img src={URL.createObjectURL(file as Blob)} alt="Uploaded" />
+    </div>
+  ) : (
+    <div className="hidden">
+      <h3>Preview:</h3>
+      <img src="" alt="" />
+    </div>
+  )}
+  {!file && typeof file !== "string" && (
+    <FaFile className="text-9xl mb-6 text-white" />
+  )}
+  {!file && (
+    <p className="text-2xl text-gray-400">No preview available</p>
+  )}
+  {!file && (
+    <p className="text-base text-gray-400">194 MB - DMG</p>
+  )}
+</div>
+
+
       <div className="flex bg-white rounded-md py-2 pl-4 w-[75%] m-auto">
         <input
           type="text"
@@ -114,9 +146,7 @@ const SelectFile: React.FC<SelectFileProps> = ({ file }) => {
         <div className="bg-themecolor rounded-full w-16 h-16 cursor-pointer flex items-center justify-center">
           <FaPaperPlane className="text-3xl text-white" />
         </div>
-
       </div>
-
     </div>
   );
 };
