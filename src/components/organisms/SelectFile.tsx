@@ -12,6 +12,16 @@ const SelectFile: React.FC<SelectFileProps> = ({ file }) => {
   const [message, setMessage] = useState("");
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
 
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
   };
@@ -36,66 +46,70 @@ const SelectFile: React.FC<SelectFileProps> = ({ file }) => {
     onDrop: handleFileDrop,
   });
 
-
   return (
-      <div className="dropzone bg-chatGray z-30 h-[89vh] w-[65%] right-12 top-16 space-y-10 fixed">
-        <div className="h-20 bg-gray-200 flex items-center p-4">
-          <FaTimes
-            className="text-gray-500 text-3xl cursor-pointer"
-          />{" "}
-          {/* <p>{{file.name}}</p> */}
-        </div>
-
-        <div className="flex justify-center items-center flex-col">
-          <FaFile className="text-9xl mb-6 text-white" />
-          <p className="text-2xl text-gray-400">No preview available</p>
-          <p className="text-base text-gray-400">194 MB - DMG</p>
-        </div>
-
-        <div className="flex bg-white rounded-md py-2 pl-4 w-[75%] m-auto">
-          <input
-            type="text"
-            placeholder="Type a message"
-            value={message}
-            onChange={handleChange}
-            className="w-full bg-transparent text-sm border-0 focus:outline-none"
-          />
-          <AiOutlineSmile className="mr-5 text-myG text-4xl" />
-        </div>
-        <p className=" border-b border-gray-300"></p>
-
-        <div className="flex space-x-4 justify-center">
-          {uploadedFiles.map((file, index) => (
-            <div
-              key={index}
-              className="border flex-col p-4 w-16 h-16 hover:bg-gray-500"
-            >
-              <button
-                onClick={() => handleRemoveFile(index)}
-                className="text-sm"
-              >
-                <FaTimes />
-              </button>
-
-              <FaFile className="text-5xl" />
-            </div>
-          ))}
-
-          <div {...getRootProps()} className="dropzone">
-            <input {...getInputProps()} />
-            {isDragActive ? (
-              <p>Drop the files here...</p>
-            ) : (
-              <p className="border p-4 w-16 h-16 hover:bg-gray-500">
-                <FaPlus className="cursor-pointer " />
-              </p>
-            )}
-          </div>
-          <div>
-            <FaPaperPlane className="text-5xl bg-themecolor p-4 rounded-full text-white" />
-          </div>
-        </div>
+    <div className="dropzone bg-chatGray z-30 h-[89vh] w-[65%] right-12 top-16 space-y-10 fixed">
+      <div className="h-16 bg-gray-200 flex items-center p-4">
+        <FaTimes className="text-gray-500 text-3xl cursor-pointer" />{" "}
+        {/* <p>{{file.name}}</p> */}
       </div>
+
+      <div className="flex justify-center items-center flex-col mt-20">
+        <FaFile className="text-9xl mb-6 text-white" />
+        <p className="text-2xl text-gray-400">No preview available</p>
+        <p className="text-base text-gray-400">194 MB - DMG</p>
+      </div>
+
+      <div className="flex bg-white rounded-md py-2 pl-4 w-[75%] m-auto">
+        <input
+          type="text"
+          placeholder="Type a message"
+          value={message}
+          onChange={handleChange}
+          className="w-full bg-transparent text-lg border-0 focus:outline-none"
+        />
+        <AiOutlineSmile className="mr-5 text-myG text-4xl" />
+      </div>
+      <p className=" border-b border-gray-300"></p>
+
+      <div className="flex space-x-4 justify-center">
+        {uploadedFiles.map((file, index) => (
+          <div
+            key={index}
+            className="border-4 border-themecolor flex-col p-8 w-16 h-16 relative cursor-pointer rounded-md bg-white hover:bg-gray-300 "
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            <button
+              onClick={() => handleRemoveFile(index)}
+              className="text-lg text-white absolute top-0 right-0 p-1"
+            >
+              {isHovered && <FaTimes />}
+            </button>
+
+            <FaFile className="text-4xl text-myG absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+          </div>
+        ))}
+
+        <div {...getRootProps()} className="dropzone">
+          <input {...getInputProps()} />
+          {isDragActive ? (
+            <p>Drop the files here...</p>
+          ) : (
+            <div className="border-2 p-4 w-16 h-16 flex items-center justify-center rounded-md mr-96">
+              <FaPlus className="cursor-pointer text-2xl text-myG" />
+            </div>
+          )}
+          {/* {isHovered && <span className=" bg-gray-300 text-sm px-2 py-1">Add file</span>} */}
+        </div>
+
+
+        <div className="bg-themecolor rounded-full w-16 h-16 cursor-pointer flex items-center justify-center">
+          <FaPaperPlane className="text-3xl text-white" />
+        </div>
+
+      </div>
+
+    </div>
   );
 };
 
