@@ -106,6 +106,7 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
           <p className="text-2xl text-gray-400">No preview available</p>
         )}
       </div>
+      
 
       <div className="flex bg-white rounded-md py-2 pl-4 w-[75%] m-auto">
         <input
