@@ -7,6 +7,7 @@ import { useDropzone } from "react-dropzone";
 import { FaPlus, FaTimes, FaPaperPlane, FaFile } from "react-icons/fa";
 import { AiOutlineSmile } from "react-icons/ai";
 
+
 interface SelectFileProps {
   file: File | string;
   onCaptureImage: (image: string) => void;
@@ -118,20 +119,20 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
       </div>
       <p className=" border-b border-gray-300 my-6"></p>
 
-      <div className="flex space-x-4 justify-center">
-        {uploadedFiles.map((_, index) => (
-          <div
-            key={index}
-            className="border-4 border-themecolor flex-col p-8 w-16 h-16 relative cursor-pointer rounded-md bg-white hover:bg-gray-300 "
+          <div className="flex space-x-4 justify-center">
+            {uploadedFiles.map((_, index) => (
+              <div
+                key={index}
+                className="border-4 border-themecolor flex-col p-8 w-16 h-16 relative cursor-pointer rounded-md bg-white hover:bg-gray-300 "
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-          >
-            <button
-              onClick={() => handleRemoveFile(index)}
-              className="text-lg text-white absolute top-0 right-0 p-1"
-            >
-              {isHovered && <FaTimes />}
-            </button>
+              >
+                <button
+                  onClick={() => handleRemoveFile(index)}
+                  className="text-lg text-white absolute top-0 right-0 p-1"
+                >
+                  {isHovered && <FaTimes />}
+                </button>
 
             <FaFile className="text-4xl text-myG absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
           </div>
