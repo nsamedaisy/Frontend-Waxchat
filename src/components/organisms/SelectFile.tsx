@@ -36,30 +36,16 @@ const SelectFile: React.FC<SelectFileProps> = ({ file }) => {
     onDrop: handleFileDrop,
   });
 
-  const handleDocumentClick = () => {
-    const input = document.getElementById("fileInput");
-    if (input) {
-      input.click();
-    }
-  };
 
-  const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      handleFileDrop(Array.from(files));
-    }
-  };
   return (
-    <div>
-      <div className="dropzone bg-chatGray z-30 h-[calc(100vh-117px)] bigScreen:h-[calc(100vh-117px-39px)] space-y-10">
-        <div className="h-16 bg-gray-200 flex items-center p-4">
+      <div className="dropzone bg-chatGray z-30 h-[89vh] w-[65%] right-12 top-16 space-y-10 fixed">
+        <div className="h-20 bg-gray-200 flex items-center p-4">
           <FaTimes
             className="text-gray-500 text-3xl cursor-pointer"
-            // onClick={handlePlusIconClick}
           />{" "}
           {/* <p>{{file.name}}</p> */}
         </div>
-        
+
         <div className="flex justify-center items-center flex-col">
           <FaFile className="text-9xl mb-6 text-white" />
           <p className="text-2xl text-gray-400">No preview available</p>
@@ -110,7 +96,6 @@ const SelectFile: React.FC<SelectFileProps> = ({ file }) => {
           </div>
         </div>
       </div>
-    </div>
   );
 };
 
