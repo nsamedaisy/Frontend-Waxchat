@@ -33,7 +33,6 @@ const Chats = () => {
   const [selectedFile, setSelectedFile] = useState<File | string | null>(null);
 
   const [isCameraOpen, setIsCameraOpen] = useState(false);
-  // const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const webcamRef = useRef<Webcam | null>(null);
 
   const handleCaptureImage = () => {
@@ -238,22 +237,29 @@ const Chats = () => {
         </DropdownModal>
       )}
 
-      {isCameraOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <Webcam
-            audio={false}
-            ref={webcamRef}
-            screenshotFormat="image/jpeg"
-            className="rounded-lg"
-          />
-          <button
-            onClick={handleCaptureImage}
-            className="absolute bottom-36 left-1/2 transform -translate-x-1/2 mb-8 p-5 bg-themecolor text-gray-800 rounded-full shadow-md"
-          >
-            <FaCameraRetro className="text-2xl font-extrabold text-white" />
-          </button>
-        </div>
-      )}
+{isCameraOpen && (
+  <div className="">
+    <FaTimes
+      onClick={() => setIsCameraOpen(false)}
+      className="absolute bottom-[79%] bg-themecolor left-1/3 text-2xl z-40 text-white cursor-pointer"
+    />
+
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+      <Webcam
+        audio={false}
+        ref={webcamRef}
+        screenshotFormat="image/jpeg"
+        className="rounded-lg"
+      />
+      <button
+        onClick={handleCaptureImage}
+        className="absolute bottom-36 left-1/2 transform -translate-x-1/2 mb-8 p-5 bg-themecolor text-gray-800 rounded-full shadow-md"
+      >
+        <FaCameraRetro className="text-2xl font-extrabold text-white" />
+      </button>
+    </div>
+  </div>
+)}
     </>
   );
 };

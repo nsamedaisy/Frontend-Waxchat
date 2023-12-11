@@ -79,17 +79,17 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
         <p>{typeof file === "string" ? "Captured Image" : file.name}</p>
       </div>
 
-      <div className="flex justify-center items-center flex-col my-20">
+      <div className="flex justify-center items-center flex-col my-20 h-auto">
         {file && typeof file === "string" ? (
           <div>
-            <img src={file} alt="Captured" className="max-w-full w-80 h-auto" />
+            <img src={file} alt="Captured" className="max-w-full h-80" />
           </div>
         ) : file ? (
           <div>
             <img
               src={URL.createObjectURL(file as Blob)}
               alt="Uploaded"
-              className="max-w-full w-80 mb-6 h-auto"
+              className="max-w-full mb-6 h-80"
             />
             {/* <FaFile className="text-9xl mb-6 text-white" />
             <p className="text-base text-gray-400">194 MB - DMG</p> */}
@@ -106,8 +106,7 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
         )}
       </div>
 
-      <div className="flex">
-
+      <div className="flex w-[90%]">
       <div className="flex bg-white rounded-md py-2 pl-4 w-[75%] m-auto">
         <input
           type="text"
@@ -121,9 +120,9 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
       <div className="bg-themecolor rounded-full w-12 h-12 cursor-pointer flex items-center justify-center">
           <FaPaperPlane className="text-2xl text-white" />
         </div>
-
         </div>
       <p className=" border-b border-gray-300 my-6"></p>
+
 
       <div className="flex space-x-4 justify-center">
         {uploadedFiles.map((_, index) => (
@@ -149,15 +148,14 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
           {isDragActive ? (
             <p>Drop the files here...</p>
           ) : (
-            <div className="border-2 p-4 w-16 h-16 flex items-center justify-center rounded-md mr-96">
+            <div className="border-2 p-4 w-16 h-16 flex items-center justify-center rounded-md">
               <FaPlus className="cursor-pointer text-2xl text-myG" />
             </div>
           )}
           {/* {isHovered && <span className=" bg-gray-300 text-sm px-2 py-1">Add file</span>} */}
         </div>
-
-        
       </div>
+
     </div>)}
     </>
   );
