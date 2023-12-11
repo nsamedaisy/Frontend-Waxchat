@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, ChangeEvent } from "react";
-import { useRouter } from "next/navigation";
 
 import { useDropzone } from "react-dropzone";
 import { FaPlus, FaTimes, FaPaperPlane, FaFile } from "react-icons/fa";
@@ -18,7 +17,6 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
 
   const [isHovered, setIsHovered] = useState(false);
-  const router = useRouter();
 
   const [isOpen, setIsOpen] = useState(true);
 
@@ -31,10 +29,6 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
     setIsOpen(false);
     onClose();
   };
-
-//   if (!isOpen) {
-//     return null;
-//   }
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -99,8 +93,6 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
             <img src="" alt="" />
           </div>
         )}
-        {/* {!file && typeof file !== "string" && (
-  )} */}
         {!file && (
           <p className="text-2xl text-gray-400">No preview available</p>
         )}
