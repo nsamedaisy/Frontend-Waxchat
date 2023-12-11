@@ -1,11 +1,5 @@
 import React, { forwardRef, useState } from "react";
-import Mainpopup from "../popups/mainpopup";
 import { useWhatSappContext } from "../context";
-import ShowmodalToBlock from "../popups/showmodalToBlock";
-import Reportpopup from "../popups/reportpopup";
-import Deletepopup from "../popups/deletepopup";
-import CancelPopup from "../popups/cancelPopup";
-import DisconnectPopup from "../popups/disconnectPopup";
 // import { uploadFile } from "@/utils/service/getFile";
 import { useProfileContext } from "../context/profileContext";
 import { useWhatSappContactContext } from "../context/Context";
@@ -19,9 +13,7 @@ const DropDown = forwardRef<HTMLUListElement, IAppProps>((props, ref) => {
   console.log("in the drop d");
   const [profil, setProfil] = useState<string>("Show the picture");
   const [popupMod, setPopupMod] = useState<boolean>(false);
-  const [reportPopup, setReportPopup] = useState<boolean>(false);
   const [delPopup, setDelPopup] = useState<boolean>(false);
-  const [cancelPopup, setCancelPopup] = useState<boolean>(false);
   const [disconPopup, SetDisconPopup] = useState<boolean>(false);
 
   // const { showPPicture, setShowPPicture } = useWhatSappContext();
@@ -38,9 +30,7 @@ const DropDown = forwardRef<HTMLUListElement, IAppProps>((props, ref) => {
   const handleLink = (value: string) => {
     if (value === "new group") setShowCreateGroupe((prev) => !prev);
     if (value === "to block") setPopupMod(true);
-    else if (value === "report") setReportPopup(true);
     else if (value === "remove the discussion") setDelPopup(true);
-    else if (value === "cancel this discussion") setCancelPopup(true);
     else if (value === "disconnect") SetDisconPopup(true);
 
     if (value === "Show the picture") setShowPPicture(true);
@@ -99,17 +89,13 @@ const DropDown = forwardRef<HTMLUListElement, IAppProps>((props, ref) => {
     <>
       {popupMod && <ShowmodalToBlock visible={popupMod} />}
 
-      {reportPopup && <Reportpopup visible={reportPopup} />}
-
       {delPopup && <Deletepopup visible={delPopup} />}
-
-      {cancelPopup && <CancelPopup visible={cancelPopup} />}
 
       {disconPopup && (
         <DisconnectPopup onClose={handleOnclose} visible={disconPopup} />
       )}
 
-      {!(popupMod && reportPopup && delPopup && cancelPopup && disconPopup) && (
+      {!(popupMod && delPopup && disconPopup) && (
         <ul
           ref={ref}
           className="absolute mt-8 py-2 w-[250px] bg-white rounded-md shadow-xl z-2 transition-transform delay-5000 ease-in-out -translate-x-48 z-100"

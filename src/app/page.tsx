@@ -5,9 +5,9 @@ import InfoCard from "@/components/organisms/InfoCard";
 export default function Home() {
   return (
     <div>
-      {/* <Signnuppage /> */}
+      <Signnuppage />
       {/* <Signupb /> */}
-      <InfoCard />
+      {/* <InfoCard /> */}
     </div>
   );
 }

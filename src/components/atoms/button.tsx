@@ -1,16 +1,18 @@
 import React from "react";
 
-interface WhitebtnProps {
+type Props = {
   label: String;
   onClick?: () => void;
   className?: String;
-}
+  bgcolor?: string;
+  textColor?: string;
+};
 
-const Button: React.FC<WhitebtnProps> = ({ label, onClick }) => {
+const Button = ({ label, onClick, bgcolor, textColor }: Props) => {
   return (
     <div>
       <button
-        className="rounded-full px-8 py-2 text-[15px] text-slate-50 bg-teal-600 font-semibold cursor-pointer"
+        className={`rounded-full px-8 py-2 text-[15px] ${textColor} ${bgcolor} font-semibold cursor-pointer`}
         onClick={onClick}
       >
         {label}
