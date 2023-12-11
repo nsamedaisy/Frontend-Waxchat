@@ -106,6 +106,8 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
         )}
       </div>
 
+      <div className="flex">
+
       <div className="flex bg-white rounded-md py-2 pl-4 w-[75%] m-auto">
         <input
           type="text"
@@ -116,6 +118,11 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
         />
         <AiOutlineSmile className="mr-5 text-myG text-4xl" />
       </div>
+      <div className="bg-themecolor rounded-full w-12 h-12 cursor-pointer flex items-center justify-center">
+          <FaPaperPlane className="text-2xl text-white" />
+        </div>
+
+        </div>
       <p className=" border-b border-gray-300 my-6"></p>
 
       <div className="flex space-x-4 justify-center">
@@ -149,9 +156,7 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
           {/* {isHovered && <span className=" bg-gray-300 text-sm px-2 py-1">Add file</span>} */}
         </div>
 
-        <div className="bg-themecolor rounded-full w-16 h-16 cursor-pointer flex items-center justify-center">
-          <FaPaperPlane className="text-3xl text-white" />
-        </div>
+        
       </div>
     </div>)}
     </>
