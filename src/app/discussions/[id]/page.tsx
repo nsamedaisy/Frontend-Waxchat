@@ -274,7 +274,7 @@ const Chats = () => {
               <div className="absolute bottom-28 font-bold left-1/2 transform space-x-10 -translate-x-1/2">
                 <button
                   className={`${
-                    captureMode === "photo" ? "text-yellow" : "text-gray-600"
+                    captureMode === "photo" ? "text-yellow" : "text-gray-500"
                   }`}
                   onClick={() => setCaptureMode("photo")}
                 >
@@ -282,7 +282,7 @@ const Chats = () => {
                 </button>
                 <button
                   className={`${
-                    captureMode === "video" ? "text-white" : "text-gray-600"
+                    captureMode === "video" ? "text-white" : "text-gray-500"
                   }`}
                   onClick={() => setCaptureMode("video")}
                 >
