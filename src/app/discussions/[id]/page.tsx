@@ -2,7 +2,7 @@
 
 import React, { useState, ChangeEvent, useEffect, useRef } from "react";
 
-import { uploadFileToSupabase } from "@/utils/service/queries"
+// import { uploadFileToSupabase } from "@/utils/service/queries"
 
 import { useDropzone } from "react-dropzone";
 import Webcam from "react-webcam";
@@ -28,12 +28,18 @@ import ContactInfo from "@/components/organisms/ContactInfo";
 import DropdownModal from "@/components/atoms/DropdownModal";
 import SelectFile from "@/components/organisms/SelectFile";
 
+// interface SelectedFile {
+//   file: File;
+//   filePreviewUrl: string;
+// }
+
 const Chats = () => {
   const [message, setMessage] = useState("");
   const [showInfoCard, setShowInfoCard] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
 
   const [selectedFile, setSelectedFile] = useState<File | string | null>(null);
+  const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(null);
 
   const [captureMode, setCaptureMode] = useState<"photo" | "video">("photo");
   const [isCameraOpen, setIsCameraOpen] = useState(false);
@@ -56,20 +62,31 @@ const Chats = () => {
       // Logic to start video recording
     }
   };
-
-  const handleFileSelect = async (acceptedFiles: File[]) => {
-    if (acceptedFiles.length > 0) {
-      const file = acceptedFiles[0];
   
-      try {
-        const fileUrl = await uploadFileToSupabase(file);
-        if (fileUrl) {
-          console.log('File uploaded successfully:', fileUrl.data.publicUrl);
-          setSelectedFile(fileUrl.data.publicUrl);
-        }
-      } catch (error) {
-        console.error('Error uploading file:', error);
-      }
+  // const handleFileSelect = async (acceptedFiles: File[]) => {
+  //   if (acceptedFiles.length > 0) {
+  //     const file = acceptedFiles[0];
+  
+  //     try {
+  //       const filePreviewUrl = URL.createObjectURL(file);
+  //       setSelectedFile(file);
+  //       setFilePreviewUrl(filePreviewUrl);
+  
+  //       const fileUrl = await uploadFileToSupabase(file);
+  //       if (fileUrl) {
+  //         console.log('File uploaded successfully:', fileUrl.data.publicUrl);
+  //         setSelectedFile(null);
+  //         setFilePreviewUrl(null);
+  //       }
+  //     } catch (error) {
+  //       console.error('Error uploading file:', error);
+  //     }
+  //   }
+  // };
+
+  const handleFileSelect = (acceptedFiles: File[]) => {
+    if (acceptedFiles.length > 0) {
+      setSelectedFile(acceptedFiles[0]);
     }
   };
 
