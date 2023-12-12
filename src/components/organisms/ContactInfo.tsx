@@ -9,6 +9,7 @@ import Popups from "../atoms/Popups";
 import { IoMdPersonAdd } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { SITE_URL } from "@/utils/service/constant";
+import RenderGroupContact from "../molecules/renderGroupContact";
 
 type ContactCardProps = {
   id: string;
@@ -163,8 +164,8 @@ const ContactInfo = ({
       {showAddMembers && (
         <>
           <Overlay onClick={() => setShowAddMembers((prev) => !prev)} />
-          <div className="z-40 fixed">
-            <h2>hello world</h2>
+          <div className="z-40 fixed flex items-center justify-center">
+            <RenderGroupContact />
           </div>
         </>
       )}
