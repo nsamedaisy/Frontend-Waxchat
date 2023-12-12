@@ -70,3 +70,23 @@ export const uplaodImage = async (file: any) => {
     return imageUrl.data.publicUrl;
   }
 };
+
+
+//upload all file types to supabase 
+export const uploadFileToSupabase = async (file: File) => {
+  const fileName = `file_${Date.now()}.${file.name.split('.').pop()}`;
+
+  const { data, error } = await supabase.storage
+    .from("your_bucket_name")
+    .upload(fileName, file);
+
+  if (error) {
+    console.error("Error uploading file to Supabase:", error);
+  } else {
+    const fileUrl = supabase.storage
+      .from("your_bucket_name")
+      .getPublicUrl(data.path);
+    console.log("File download URL:", fileUrl);
+    return fileUrl;
+  }
+};
