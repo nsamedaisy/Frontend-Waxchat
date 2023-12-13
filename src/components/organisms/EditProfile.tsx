@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef } from "react";
-import Dp from "../molecules/Dp";
+import Dp from "../molecules/ProfilePicture";
 
 // context import
 import { AppContext } from "next/app";
@@ -15,44 +15,55 @@ import { IoMdClose } from "react-icons/io";
 import { SITE_URL } from "@/utils/service/constant";
 import { toast } from "react-toastify";
 
+import { TbHourglassEmpty } from "react-icons/tb";
+
 const EditProfile = () => {
   const [onEditName, setOnEditName] = useState(false);
   const [onEditAbout, setOnEditAbout] = useState(false);
-  const { currentUser } = useAppContext();
+  const { currentUser, setCurrentUser } = useAppContext();
   const [userName, setUserName] = useState(currentUser?.name);
+
+  const [isLoading, setIsLoading] = useState(false);
+
   const [about, setAbout] = useState("");
 
   const [profilePhoto, setProfilePhoto] = useState(currentUser?.image);
 
   const inputRef: any = useRef();
 
-  const email = JSON.parse(localStorage.getItem("email") || "");
+  const email = JSON.parse(localStorage.getItem("email") || "{}");
+
   const handleUpdateName = async () => {
-    try {
-      const payload = { name: userName };
-      const response = await fetch(SITE_URL + `/rooms/${currentUser.id}`, {
-        method: "PUT",
-        body: JSON.stringify(payload),
-      });
-      if (!response.ok) {
-        toast.error("unable to update profile name...!", {
-          position: "top-right",
-          hideProgressBar: true,
-          autoClose: 3000,
-        });
-        throw new Error("unable to update profile name");
-      }
-      const data = await response.json();
-      toast.success("profile name updated...!", {
+    setIsLoading(true);
+    const update = { name: userName };
+    if (!update.name) {
+      toast.error("UserName can not be empty!", {
         position: "top-right",
         hideProgressBar: true,
-        autoClose: 3000,
+        autoClose: 2000,
       });
-      console.log("this is new user OBJECT", data);
-    } catch (error) {
-      console.error(error); 
+      setIsLoading(false);
+
+      return;
     }
-    setOnEditName((prev) => !prev);
+
+    await updateProfileName(currentUser.id, update)
+      .then((res) => {
+        localStorage.setItem("sender", JSON.stringify(res));
+        setOnEditName((prev) => !prev);
+        toast.success("UserName updated", {
+          position: "top-right",
+          hideProgressBar: true,
+          autoClose: 2000,
+        });
+        console.log(res);
+        setCurrentUser(res);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+      });
   };
 
   const handleUpdateAbout = () => {
@@ -62,22 +73,42 @@ const EditProfile = () => {
   // Upload image
   const handleImageUpload = async (e: any) => {
     // console.log(e.target.files);
+    setIsLoading(true);
 
     const file = e.target.files[0];
     const photoUrl = await uplaodImage(file);
     if (photoUrl) {
       setProfilePhoto(photoUrl);
-      // console.log(photoUrl);
+
+      await updateProfileName(currentUser.id, { image: photoUrl })
+        .then((res) => {
+          localStorage.setItem("sender", JSON.stringify(res));
+          setCurrentUser(res);
+          toast.success("image updated", {
+            position: "top-right",
+            hideProgressBar: true,
+            autoClose: 2000,
+          });
+          console.log(res);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          console.log(error);
+          setIsLoading(false);
+        });
     }
   };
 
   return (
-    <div>
+    <div className="relative">
       <Dp
         image={profilePhoto || ""}
         content={"CHANGE PROFILE PHOTO"}
         onClick={() => inputRef.current.click()}
       />
+      {isLoading && (
+        <div className="loader m-auto absolute right-[45%] border-t-2 rounded-full border-themecolor bg-gray-300 animate-spin aspect-square w-8 flex justify-center items-center text-yellow-700"></div>
+      )}
       <div className="px-5 py-2 flex flex-col gap-5">
         <span className="text-sm text-darkgreen">your name</span>
 

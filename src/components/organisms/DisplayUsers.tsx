@@ -4,13 +4,13 @@ import ContactCard from "./ContactCard";
 import { useAppContext } from "@/app/Context/AppContext";
 
 type Props = {
-  users: any;
-  contactClick: (user: User) => void;
+  contactClick: (user: Room) => void;
   goToCreateGrt: () => void;
+  users: Room[];
 };
 
 const DisplayUsers = ({ contactClick, goToCreateGrt, users }: Props) => {
-  // const { allUsers } = useAppContext();
+  const { allUsers } = useAppContext();
 
   return (
     <div className=" h-[calc(100vh-161px)] bigScreen:h-[calc(95vh-153px)] overflow-x-hidden overflow-y-scroll">
@@ -32,11 +32,10 @@ const DisplayUsers = ({ contactClick, goToCreateGrt, users }: Props) => {
         <ContactCard
           user={user}
           key={user.id}
-          onClick={() => contactClick(user as User)}
+          onClick={() => contactClick(user)}
           notification={""}
           active={false}
           className={""}
-          updatedAt={""}
         />
       ))}
     </div>

@@ -1,13 +1,13 @@
 "use client";
 import React, { useState, useRef } from "react";
-import Dp from "../molecules/Dp";
+import ProfilPicture from "../molecules/ProfilePicture";
 import { toast } from "react-toastify";
 
 // Icons Import
 import { VscPassFilled } from "react-icons/vsc";
 import {
   addGroupMembers,
-  createGroup,
+  createRoom,
   uplaodImage,
 } from "@/utils/service/queries";
 import { useAppContext } from "@/app/Context/AppContext";
@@ -19,19 +19,17 @@ type setupProps = {
 function GroupSetup({ closeModal }: setupProps) {
   const [groupName, setGroupName] = useState("");
   const [groupIcon, setGroupIcon] = useState("");
+  const [isLoading, setIsloading] = useState(false);
   //   const [file, setFile] = useState<FileList | null>();
 
-  const { currentUser, chatRooms, setChatRooms } = useAppContext();
+  const { currentUser, setChatRooms } = useAppContext();
 
   const handleImageUpload = async (e: any) => {
-    // setFile(e.target.files[0]);
     const file = e.target.files[0];
     const groupAvatar = await uplaodImage(file);
     if (groupAvatar) {
       setGroupIcon(groupAvatar);
-      //   console.log("Group icon", groupAvatar);
     }
-    // console.log(e.target.files[0]);
   };
 
   //   console.log(file);
@@ -39,12 +37,15 @@ function GroupSetup({ closeModal }: setupProps) {
   const inputRef: any = useRef();
 
   const handleCreateGroup = async () => {
+    setIsloading(true);
     if (!groupName) {
       toast.warning("upload group icon first...!", {
         position: "top-right",
         hideProgressBar: true,
         autoClose: 3000,
       });
+      setIsloading(false);
+
       return;
     }
 
@@ -54,15 +55,17 @@ function GroupSetup({ closeModal }: setupProps) {
         hideProgressBar: true,
         autoClose: 3000,
       });
+      setIsloading(false);
+
       return;
     }
 
-    const members = JSON.parse(localStorage.getItem("group_members") || "");
+    const members = JSON.parse(localStorage.getItem("group_members") || "[]");
     let membersIDs = members.map((member: User) => member.id);
     if (!members.find((member: string) => member === currentUser.user_id)) {
       membersIDs = [...membersIDs, currentUser.user_id];
     }
-    console.log("membersId,", membersIDs);
+    // console.log("membersId,", membersIDs);
 
     const groupData = {
       name: groupName,
@@ -71,14 +74,17 @@ function GroupSetup({ closeModal }: setupProps) {
       my_id: currentUser.user_id,
       isGroup: true,
     };
-    await createGroup(groupData).then(async (res) => {
+    await createRoom(groupData).then(async (res) => {
       if (res.error) {
         toast.error("Failed to create Group...!", {
           position: "top-right",
           hideProgressBar: true,
           autoClose: 3000,
         });
+        console.log("error creating groups", res);
         console.log(res.message);
+        setIsloading(false);
+
         return;
       } else {
         await addGroupMembers(membersIDs, res.id).then((response) => {
@@ -99,13 +105,14 @@ function GroupSetup({ closeModal }: setupProps) {
       autoClose: 3000,
     });
     setGroupName("");
+    setIsloading(false);
     localStorage.removeItem("group_members");
     closeModal();
   };
 
   return (
     <div className=" h-full">
-      <Dp
+      <ProfilPicture
         image={groupIcon}
         content={"Change group icon"}
         onClick={() => inputRef.current.click()}
@@ -130,12 +137,16 @@ function GroupSetup({ closeModal }: setupProps) {
       />
 
       <div className="bg-bgGray absolute w-full bottom-0 flex items-center py-3 ">
-        <button
-          onClick={handleCreateGroup}
-          className="w-[2.5rem] text-themecolor  m-auto"
-        >
-          <VscPassFilled size={50} />
-        </button>
+        {isLoading ? (
+          <div className="loader m-auto border-t-2 rounded-full border-themecolor bg-gray-300 animate-spin aspect-square w-8 flex justify-center items-center text-yellow-700"></div>
+        ) : (
+          <button
+            onClick={handleCreateGroup}
+            className="w-[2.5rem] text-themecolor  m-auto"
+          >
+            <VscPassFilled size={50} />
+          </button>
+        )}
       </div>
     </div>
   );
