@@ -20,7 +20,11 @@ import ContactCard from "./ContactCard";
 import AddGroupMembers from "./AddGroupMembers";
 import { LOCAL_STORAGE } from "@/utils/service/storage";
 import AddedMember from "../molecules/AddedMember";
-import { addGroupMembers, getGroupMembers, handleDelete } from "@/utils/service/queries";
+import {
+  addGroupMembers,
+  getGroupMembers,
+  handleDelete,
+} from "@/utils/service/queries";
 import RoundedLoader from "../atoms/RoundedLoader";
 
 type ContactCardProps = {
@@ -64,14 +68,14 @@ const ContactInfo = ({
         router.push("/discussions");
       })
       .catch((err) => {
-        toast.error('Unable to delete discussion', {
+        toast.error("Unable to delete discussion", {
           position: "top-right",
           hideProgressBar: true,
           autoClose: 2000,
-        })
-      })
+        });
+      });
     setOnDelete((prev) => !prev);
-  }
+  };
 
   useEffect(() => {
     if (receiver.isGroup) {
@@ -124,11 +128,19 @@ const ContactInfo = ({
 
   // Add Members To Group
   const handleAddToGroup = async () => {
+    setIsLoading(true);
     let membersIDs = members.map((member: User) => member.id);
     console.log("membersIDs", membersIDs);
     const membersAdded = await addGroupMembers(membersIDs, receiver.id).then(
       (res) => {
+        toast.success("added successfuly...!", {
+          position: "top-right",
+          hideProgressBar: true,
+          autoClose: 3000,
+        });
         console.log("response", res);
+        setShowAddMembers((prev) => !prev);
+        onClose();
       }
     );
     console.log("membersAdded", membersAdded);
@@ -141,7 +153,7 @@ const ContactInfo = ({
   };
 
   // handleClickContact
-  const handleClickContact = (_user: User) => { };
+  const handleClickContact = (_user: User) => {};
 
   return (
     <div className="w-[45vw] z-20 mobile:max-sm:w-full bg-bgGray ">
@@ -185,7 +197,9 @@ const ContactInfo = ({
                   {`${participants.length ? participants.length : 0}`} Members
                 </p>
                 <button
-                  onClick={() => setShowAddMembers((prev) => !prev)}
+                  onClick={() => {
+                    setShowAddMembers((prev) => !prev);
+                  }}
                   className="hover:bg-bgGray flex items-center p-4 gap-4"
                 >
                   <span className="bg-themecolor text-white p-2 rounded-[50%]">
@@ -252,8 +266,9 @@ const ContactInfo = ({
                 </div>
 
                 <div
-                  className={`${!members.length ? "hidden" : "visble p-4 "
-                    }p-4 flex flex-wrap gap-2 overflow-y-auto  max-h-[80px]`}
+                  className={`${
+                    !members.length ? "hidden" : "visble p-4 "
+                  }p-4 flex flex-wrap gap-2 overflow-y-auto  max-h-[80px]`}
                 >
                   {members.map((member: User) => (
                     <AddedMember
@@ -266,8 +281,9 @@ const ContactInfo = ({
                 </div>
 
                 <div
-                  className={`w-full ${members.length ? "h-[calc(90vh-115px-80px)]" : ""
-                    } h-[calc(90vh-115px)] mobile:max-sm:h-[calc(100vh-115px)]  overflow-x-auto `}
+                  className={`w-full ${
+                    members.length ? "h-[calc(90vh-115px-80px)]" : ""
+                  } h-[calc(90vh-115px)] mobile:max-sm:h-[calc(100vh-115px)]  overflow-x-auto `}
                 >
                   {filteredUsers.map((user) => (
                     <ContactCard
