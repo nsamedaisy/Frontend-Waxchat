@@ -62,7 +62,6 @@ const SelectFile: React.FC<SelectFileProps> = ({ file, onCaptureImage, onClose }
     onDrop: handleFileDrop,
   });
 
-
   const renderPreview = () => {
     if (typeof file === "string") {
       return <img src={file} alt="Captured" className="max-w-full h-80" />;

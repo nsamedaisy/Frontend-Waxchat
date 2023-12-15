@@ -6,6 +6,7 @@ import Webcam from "react-webcam";
 import ContactInfo from "@/components/organisms/ContactInfo";
 import DropdownModal from "@/components/atoms/DropdownModal";
 import SelectFile from "@/components/organisms/SelectFile";
+import axios from 'axios';
 
 import React, { useState, ChangeEvent, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
@@ -150,18 +151,38 @@ const Chats = () => {
     }
   };
 
+  // const saveFileUrlToMongo = async (fileUrl: string) => {
+  //   try {
+  //     const response = await axios.post('/api/save-file-url', { fileUrl });
+  //     console.log("File URL saved to MongoDB:", response.data);
+  //   } catch (error) {
+  //     console.error("Error saving file URL to MongoDB:", error);
+  //   }
+  // };
+  
+  // const sendFileToUser = async (fileUrl: string) => {
+  //   try {
+  //     const response = await axios.post('/api/send-file-to-user', { fileUrl });
+  //     console.log("File sent to the user:", response.data);
+  //   } catch (error) {
+  //     console.error("Error sending file to the user:", error);
+  //   }
+  // };
+
   const handleFileSelect = async (acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
       const file = acceptedFiles[0];
 
+  
       try {
         const filePreviewUrl = URL.createObjectURL(file);
         setSelectedFile(file);
         setFilePreviewUrl(filePreviewUrl);
-
+  
         const fileUrl = await uploadFileToSupabase(file);
         if (fileUrl) {
           console.log("File uploaded successfully:", fileUrl.data.publicUrl);
+  
           setSelectedFile(null);
           setFilePreviewUrl(null);
         }
