@@ -56,7 +56,7 @@ const Signupb = () => {
   };
 
   return (
-    <div className=" mt-56 items-center justify-center text-center">
+    <div className=" mt-[35vh] p-4 items-center mobile:max-sm:mt-[25vh] bg-white justify-center text-center">
       <h1 className="text-3xl font-extrabold text-slate-800 font-serif">
         Welcome to <span className="text-4xl"> WAXCHAT</span> WEB
       </h1>
