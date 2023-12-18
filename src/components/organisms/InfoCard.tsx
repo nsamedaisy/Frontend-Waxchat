@@ -6,7 +6,7 @@ import { AiFillStar } from "react-icons/ai";
 import { FaDigitalOcean } from "react-icons/fa";
 import { BsFillBookmarkFill, BsX } from "react-icons/bs";
 import { TbBellFilled } from "react-icons/tb";
-import Dp from "../molecules/Dp";
+import Dp from "../molecules/ProfilePicture";
 import ContactAction from "../molecules/ContactAction";
 
 import { MdLock } from "react-icons/md";
@@ -19,6 +19,8 @@ const Profile = (props: Props) => {
   const handleCloseContactInfo = () => {
     setIsContactInfoOpen(false);
   };
+
+  const changeProfilePhoto = () => {};
 
   return (
     <>
@@ -36,7 +38,11 @@ const Profile = (props: Props) => {
           </div>
 
           <div className="pt-28">
-            <Dp />
+            <Dp
+              image={""}
+              content={"CHANGE PROFILE PHOTO"}
+              onClick={changeProfilePhoto}
+            />
           </div>
           <div className=" w-full px-7 pr-6 py-4 text-[#667781] border-y border-y-gray-200 flex flex-col">
             <span className=" text-[#667781] border-y-gray-200 mb-3">
