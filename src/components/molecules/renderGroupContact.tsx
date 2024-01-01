@@ -8,6 +8,7 @@ const RenderGroupContact = () => {
         <IoIosArrowBack color={"white"} width={50} hieght={50} />
         <p className="text-white text-[17px]">Add a member</p>
       </div>
+      <div className=""></div>
     </div>
   );
 };
